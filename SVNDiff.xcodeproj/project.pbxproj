@@ -1,0 +1,300 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5A268D6C1AC8F0BA00F18712 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A268D6B1AC8F0BA00F18712 /* Foundation.framework */; };
+		5A42D67B1AC8E403000323B6 /* SVNDiff.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A42D67A1AC8E403000323B6 /* SVNDiff.mm */; };
+		5A42D67F1AC8ED42000323B6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A42D67E1AC8ED42000323B6 /* AppKit.framework */; };
+		5A7054331AC90856006F4E09 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 5A7054321AC90856006F4E09 /* README.md */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		5A268D6B1AC8F0BA00F18712 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		5A42D66F1AC8E3C3000323B6 /* SVNDiff.xcplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SVNDiff.xcplugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A42D6731AC8E3C3000323B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5A42D6791AC8E403000323B6 /* SVNDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVNDiff.h; sourceTree = "<group>"; };
+		5A42D67A1AC8E403000323B6 /* SVNDiff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVNDiff.mm; sourceTree = "<group>"; };
+		5A42D67E1AC8ED42000323B6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		5A7054321AC90856006F4E09 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5A42D66C1AC8E3C3000323B6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A268D6C1AC8F0BA00F18712 /* Foundation.framework in Frameworks */,
+				5A42D67F1AC8ED42000323B6 /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5A42D6661AC8E3C3000323B6 = {
+			isa = PBXGroup;
+			children = (
+				5A42D6711AC8E3C3000323B6 /* SVNDiff */,
+				5A42D6821AC8EEC5000323B6 /* Frameworks and Libraries */,
+				5A42D6701AC8E3C3000323B6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		5A42D6701AC8E3C3000323B6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				5A42D66F1AC8E3C3000323B6 /* SVNDiff.xcplugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		5A42D6711AC8E3C3000323B6 /* SVNDiff */ = {
+			isa = PBXGroup;
+			children = (
+				5A42D6791AC8E403000323B6 /* SVNDiff.h */,
+				5A42D67A1AC8E403000323B6 /* SVNDiff.mm */,
+				5A42D6721AC8E3C3000323B6 /* Supporting Files */,
+			);
+			path = SVNDiff;
+			sourceTree = "<group>";
+		};
+		5A42D6721AC8E3C3000323B6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5A42D6731AC8E3C3000323B6 /* Info.plist */,
+				5A7054321AC90856006F4E09 /* README.md */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5A42D6821AC8EEC5000323B6 /* Frameworks and Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				5A268D6B1AC8F0BA00F18712 /* Foundation.framework */,
+				5A42D67E1AC8ED42000323B6 /* AppKit.framework */,
+			);
+			name = "Frameworks and Libraries";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5A42D66E1AC8E3C3000323B6 /* SVNDiff */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A42D6761AC8E3C3000323B6 /* Build configuration list for PBXNativeTarget "SVNDiff" */;
+			buildPhases = (
+				5A42D66B1AC8E3C3000323B6 /* Sources */,
+				5A42D66C1AC8E3C3000323B6 /* Frameworks */,
+				5A42D66D1AC8E3C3000323B6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SVNDiff;
+			productName = SVNDiff;
+			productReference = 5A42D66F1AC8E3C3000323B6 /* SVNDiff.xcplugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5A42D6671AC8E3C3000323B6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0620;
+				ORGANIZATIONNAME = "Akhmad Syaikhul Hadi";
+				TargetAttributes = {
+					5A42D66E1AC8E3C3000323B6 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
+			};
+			buildConfigurationList = 5A42D66A1AC8E3C3000323B6 /* Build configuration list for PBXProject "SVNDiff" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 5A42D6661AC8E3C3000323B6;
+			productRefGroup = 5A42D6701AC8E3C3000323B6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5A42D66E1AC8E3C3000323B6 /* SVNDiff */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		5A42D66D1AC8E3C3000323B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		5A42D66B1AC8E3C3000323B6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A7054331AC90856006F4E09 /* README.md in Sources */,
+				5A42D67B1AC8E403000323B6 /* SVNDiff.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5A42D6741AC8E3C3000323B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		5A42D6751AC8E3C3000323B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5A42D6771AC8E3C3000323B6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DSTROOT = "$(HOME)";
+				GCC_ENABLE_OBJC_GC = unsupported;
+				INFOPLIST_FILE = SVNDiff/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				LD_RUNPATH_SEARCH_PATHS = /Developer;
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				WRAPPER_EXTENSION = xcplugin;
+			};
+			name = Debug;
+		};
+		5A42D6781AC8E3C3000323B6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_LOCATION = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DSTROOT = "$(HOME)";
+				GCC_ENABLE_OBJC_GC = unsupported;
+				INFOPLIST_FILE = SVNDiff/Info.plist;
+				INSTALL_PATH = "/Library/Application Support/Developer/Shared/Xcode/Plug-ins";
+				LD_RUNPATH_SEARCH_PATHS = /Developer;
+				OTHER_LDFLAGS = (
+					"-undefined",
+					dynamic_lookup,
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = NO;
+				STRIP_INSTALLED_PRODUCT = NO;
+				WRAPPER_EXTENSION = xcplugin;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5A42D66A1AC8E3C3000323B6 /* Build configuration list for PBXProject "SVNDiff" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A42D6741AC8E3C3000323B6 /* Debug */,
+				5A42D6751AC8E3C3000323B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5A42D6761AC8E3C3000323B6 /* Build configuration list for PBXNativeTarget "SVNDiff" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A42D6771AC8E3C3000323B6 /* Debug */,
+				5A42D6781AC8E3C3000323B6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5A42D6671AC8E3C3000323B6 /* Project object */;
+}
