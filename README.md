@@ -3,9 +3,20 @@
 This plugin was inspired by GitDiff plugin. Thanks to [johnno1962](https://github.com/johnno1962/GitDiff).
 
 SVNDiff displays deltas against a SVN repository in the Xcode source editor once you've saved the file.
-To use, copy this repo to your machine, build it and restart Xcode. Differences should then be highlighted
-in orange for lines that have been modified and green for new code. A red line indicates code has been removed.
-Hover over deleted/modified line number to see original source.
+Differences should then be highlighted in orange for lines that have been modified and green for new code.
+A red line indicates code has been removed. Hover over deleted/modified line number to see original source.
+
+### Install
+
+To use, copy this repo to your machine, build it and restart Xcode. 
+
+### Uninstall
+
+Delete the plugin:
+
+```
+rm -rf ~/Library/Application\ Support/Developer/Shared/Xcode/Plug-ins/SVNDiff.xcplugin
+```
 
 ### MIT License
 
