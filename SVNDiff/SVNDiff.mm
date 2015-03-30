@@ -9,27 +9,124 @@
 #import "SVNDiff.h"
 
 #import <objc/runtime.h>
+#import <string>
 #import <map>
 
+#define EXISTS(_map, _entry) (_map.find(_entry) != _map.end())
+
 static SVNDiff *svnDiffPlugin;
-static NSMutableDictionary *fileDiffs;
-static NSColor *modifiedColor, *addedColor;
+
+
+
+@interface SVNDiff()
+@property NSMutableDictionary *diffsByFile;
+@property NSColor *deletedColor, *modifiedColor, *addedColor;
+@property NSText *popover;
+@end
+
+@implementation SVNDiff
++ (void)pluginDidLoad:(NSBundle *)plugin
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        svnDiffPlugin = [[self alloc] init];
+        svnDiffPlugin.diffsByFile = [NSMutableDictionary new];
+        
+        svnDiffPlugin.deletedColor = [NSColor colorWithCalibratedRed:1. green:.5 blue:.5 alpha:1.];
+        svnDiffPlugin.modifiedColor = [NSColor colorWithCalibratedRed:1. green:.9 blue:.6 alpha:1.];
+        svnDiffPlugin.addedColor = [NSColor colorWithCalibratedRed:.7 green:1. blue:.7 alpha:1.];
+        
+        svnDiffPlugin.popover = [[NSText alloc] initWithFrame:NSZeroRect];
+        svnDiffPlugin.popover.backgroundColor = svnDiffPlugin.modifiedColor;
+        
+        [self swizzleClass:@"IDESourceCodeDocument"
+                  exchange:@selector(writeToURL:ofType:error:)
+                      with:@selector(svn_writeToURL:ofType:error:)];
+        [self swizzleClass:@"DVTTextSidebarView"
+                  exchange:@selector(_drawLineNumbersInSidebarRect:foldedIndexes:count:linesToInvert:linesToReplace:getParaRectBlock:)
+                      with:@selector(svn_drawLineNumbersInSidebarRect:foldedIndexes:count:linesToInvert:linesToReplace:getParaRectBlock:)];
+        [self swizzleClass:@"DVTTextSidebarView"
+                  exchange:@selector(annotationAtSidebarPoint:)
+                      with:@selector(svn_annotationAtSidebarPoint:)];
+    });
+}
+
++ (void)swizzleClass:(NSString *)className exchange:(SEL)origMethod with:(SEL)altMethod
+{
+    Class aClass = NSClassFromString(className);
+    method_exchangeImplementations(class_getInstanceMethod(aClass, origMethod),
+                                   class_getInstanceMethod(aClass, altMethod));
+}
+@end
 
 
 
 @interface SVNFileDiffs : NSObject {
 @public
-    std::map<unsigned long, BOOL> deleted, added;
+    std::map<unsigned long, std::string> deleted; // text deleted by line
+    std::map<unsigned long, unsigned long> modified; // line number mods started by line
+    std::map<unsigned long, BOOL> added; // line has been added or modified
+    time_t updated;
 }
 @end
 
 @implementation SVNFileDiffs
-@end
-
-
-
-@interface SVNDiff()
-- (SVNFileDiffs *)getDiffsForFile:(NSString *)path;
+// parse "svn diff" output
+- (SVNFileDiffs *)initFile:(NSString *)path
+{
+    if ((self = [super init])) {
+        NSString *command = [NSString stringWithFormat:@"cd '%@' && /usr/bin/svn diff '%@'",
+                             [path stringByDeletingLastPathComponent], path];
+        FILE *diffs = popen([command UTF8String], "r");
+        
+        if (diffs) {
+            char buffer[10000];
+            int line, deline, modline, delcnt, addcnt;
+            
+            for (int i=0; i<4; i++) {
+                // delete first 4 lines of Diff output
+                fgets(buffer, sizeof buffer, diffs);
+            }
+            
+            while (fgets(buffer, sizeof buffer, diffs)) {
+                switch (buffer[0]) {
+                    case '@': {
+                        int d1, d2, d3;
+                        sscanf(buffer, "@@ -%d,%d +%d,%d @@", &d1, &d2, &line, &d3);
+                        break;
+                    }
+                    case '-':
+                        deleted[deline] += buffer+1;
+                        modified[modline++] = deline;
+                        delcnt++;
+                        break;
+                    case '+':
+                        added[line] = YES;
+                    {
+                        auto modent = modified.find(line);
+                        if (++addcnt > delcnt && modent != modified.end()) {
+                            modified.erase(modent);
+                        }
+                    }
+                    default:
+                        deline = modline = ++line;
+                        if (buffer[0] != '+') {
+                            delcnt = addcnt = 0;
+                        }
+                }
+            }
+            
+            pclose(diffs);
+        } else {
+            NSLog(@"SVNDiff Plugin: Could not run diff command: %@", command);
+        }
+        
+        svnDiffPlugin.diffsByFile[path] = self;
+        updated = time(NULL);
+    }
+    
+    return self;
+}
 @end
 
 
@@ -41,7 +138,7 @@ static NSColor *modifiedColor, *addedColor;
 // source file is being saved
 - (BOOL)svn_writeToURL:(NSURL *)url ofType:(NSString *)type error:(NSError **)error
 {
-    [svnDiffPlugin performSelector:@selector(getDiffsForFile:) withObject:[[self fileURL] path]];
+    [[SVNFileDiffs alloc] performSelectorInBackground:@selector(initFile:) withObject:[[self fileURL] path]];
     return [self svn_writeToURL:url ofType:type error:error];
 }
 @end
@@ -50,100 +147,90 @@ static NSColor *modifiedColor, *addedColor;
 
 @interface DVTTextSidebarView : NSRulerView
 - (void)getParagraphRect:(CGRect *)a0 firstLineRect:(CGRect *)a1 forLineNumber:(unsigned long)a2;
+- (unsigned long)lineNumberForPoint:(CGPoint)a0;
+- (double)sidebarWidth;
 @end
 
 @implementation DVTTextSidebarView(SVNDiff)
+- (NSTextView *)sourceTextView {
+    return (NSTextView *)[(id)[self scrollView] delegate];
+}
+
+- (SVNFileDiffs *)svnDiffs
+{
+    IDESourceCodeDocument *doc = [(id)[[self sourceTextView] delegate] document];
+    NSString *path = [[doc fileURL] path];
+    
+    SVNFileDiffs *diffs = svnDiffPlugin.diffsByFile[path];
+    if (!diffs || time(NULL) > diffs->updated+60) {
+        diffs = [[SVNFileDiffs alloc] initFile:path];
+    }
+    
+    return diffs;
+}
+
 // the line numbers sidebar is being redrawn
 - (void)svn_drawLineNumbersInSidebarRect:(CGRect)rect foldedIndexes:(unsigned long *)indexes count:(unsigned long)indexCount linesToInvert:(id)a3 linesToReplace:(id)a4 getParaRectBlock:rectBlock
 {
-    IDESourceCodeDocument *doc = [self valueForKeyPath:@"scrollView.delegate.delegate.document"];
-    NSString *path = [[doc fileURL] path];
-    SVNFileDiffs *deltas = fileDiffs[path];
-    
-    if (!deltas) {
-        deltas = [svnDiffPlugin getDiffsForFile:path];
-    }
+    SVNFileDiffs *diffs = [self svnDiffs];
     
     [self lockFocus];
     
     for (int i=0; i<indexCount; i++) {
-        NSColor *highlight = deltas->added.find(indexes[i]) == deltas->added.end() ? nil :
-            deltas->deleted.find(indexes[i]) != deltas->deleted.end() ? modifiedColor : addedColor;
+        unsigned long line = indexes[i];
+        NSColor *highlight = !EXISTS(diffs->added, line) ? nil :
+            EXISTS(diffs->modified, line) ? svnDiffPlugin.modifiedColor : svnDiffPlugin.addedColor;
+        CGRect a0, a1;
+        
         if (highlight) {
-            CGRect a0, a1;
             [highlight setFill];
             [self getParagraphRect:&a0 firstLineRect:&a1 forLineNumber:indexes[i]];
-            NSRectFill(CGRectInset(a0, 1, 1));
+            NSRectFill(CGRectInset(a0, 1., 1.));
+        } else if (EXISTS(diffs->deleted, line)) {
+            [svnDiffPlugin.deletedColor setFill];
+            [self getParagraphRect:&a0 firstLineRect:&a1 forLineNumber:line];
+            a0.size.height = 1.;
+            NSRectFill(a0);
         }
     }
     
     [self unlockFocus];
-    [self svn_drawLineNumbersInSidebarRect:rect foldedIndexes:indexes count:indexCount linesToInvert:a3 linesToReplace:a4 getParaRectBlock:rectBlock];
-}
-@end
-
-
-
-@implementation SVNDiff
-+ (void)pluginDidLoad:(NSBundle *)plugin
-{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        svnDiffPlugin = [[self alloc] init];
-        fileDiffs = [NSMutableDictionary new];
-        
-        modifiedColor = [NSColor colorWithCalibratedRed:1. green:.9 blue:.6 alpha:1.];
-        addedColor = [NSColor colorWithCalibratedRed:.7 green:1. blue:.7 alpha:1.];
-        
-        Class aClass = NSClassFromString(@"DVTTextSidebarView");
-        Method orig_method = class_getInstanceMethod(aClass, @selector(_drawLineNumbersInSidebarRect:foldedIndexes:count:linesToInvert:linesToReplace:getParaRectBlock:));
-        Method alt_method = class_getInstanceMethod(aClass, @selector(svn_drawLineNumbersInSidebarRect:foldedIndexes:count:linesToInvert:linesToReplace:getParaRectBlock:));
-        method_exchangeImplementations(orig_method, alt_method);
-        
-        aClass = NSClassFromString(@"IDESourceCodeDocument");
-        orig_method = class_getInstanceMethod(aClass, @selector(writeToURL:ofType:error:));
-        alt_method = class_getInstanceMethod(aClass, @selector(svn_writeToURL:ofType:error:));
-        method_exchangeImplementations(orig_method, alt_method);
-    });
+    [self svn_drawLineNumbersInSidebarRect:rect foldedIndexes:indexes count:indexCount
+                             linesToInvert:a3 linesToReplace:a4 getParaRectBlock:rectBlock];
 }
 
-// parse "svn diff" output
-- (SVNFileDiffs *)getDiffsForFile:(NSString *)path
+- (id)svn_annotationAtSidebarPoint:(CGPoint)p0
 {
-    NSString *command = [NSString stringWithFormat:@"cd '%@' && /usr/bin/svn diff '%@'",
-                         [path stringByDeletingLastPathComponent], path];
-    FILE *diffs = popen([command UTF8String], "r");
-    SVNFileDiffs *deltas = [SVNFileDiffs new];
+    NSText *popover = svnDiffPlugin.popover;
+    id annotation = [self svn_annotationAtSidebarPoint:p0];
     
-    if (diffs) {
-        char buffer[10000];
-        int line, deline;
+    if (!annotation && p0.x < self.sidebarWidth) {
+        SVNFileDiffs *diffs = [self svnDiffs];
+        unsigned long line = [self lineNumberForPoint:p0];
         
-        for (int i=0; i<4; i++) {
-            // delete first 4 lines of Diff output
-            fgets(buffer, sizeof buffer, diffs);
+        if (EXISTS(diffs->deleted, line) ||
+            (EXISTS(diffs->added, line) && EXISTS(diffs->modified, line))) {
+            CGRect a0, a1;
+            unsigned long start = diffs->modified[line];
+            [self getParagraphRect:&a0 firstLineRect:&a1 forLineNumber:start];
+            
+            std::string deleted = diffs->deleted[start];
+            deleted = deleted.substr(0, deleted.length()-1);
+            
+            popover.font = [self sourceTextView].font;
+            popover.string = [NSMutableString stringWithUTF8String:deleted.c_str()];
+            popover.frame = NSMakeRect(self.frame.size.width+1, a0.origin.y, 700, 10.);
+            [popover sizeToFit];
+            
+            [self.scrollView addSubview:popover];
+            return annotation;
         }
-        
-        while (fgets(buffer, sizeof buffer, diffs)) {
-            switch (buffer[0]) {
-                case '@':
-                    int d1, d2, d3;
-                    sscanf(buffer, "@@ -%d,%d +%d,%d @@", &d1, &d2, &line, &d3);
-                    break;
-                case '-':
-                    deltas->deleted[deline++] = YES;
-                case '+':
-                    deltas->added[line] = YES;
-                default:
-                    deline = ++line;
-            }
-        }
-        
-        pclose(diffs);
-    } else {
-        NSLog(@"Could not run diff command: %@", command);
     }
-    fileDiffs[path] = deltas;
-    return deltas;
+    
+    if ([popover superview]) {
+        [popover removeFromSuperview];
+    }
+    
+    return annotation;
 }
 @end
