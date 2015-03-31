@@ -7,10 +7,10 @@
 //
 
 #import "SVNDiff.h"
-
 #import <objc/runtime.h>
 #import <string>
 #import <map>
+#import "SVNDiffColorsWindowController.h"
 
 #define EXISTS(_map, _entry) (_map.find(_entry) != _map.end())
 
@@ -20,8 +20,8 @@ static SVNDiff *svnDiffPlugin;
 
 @interface SVNDiff()
 @property NSMutableDictionary *diffsByFile;
-@property NSColor *deletedColor, *modifiedColor, *addedColor;
 @property NSText *popover;
+@property SVNDiffColorsWindowController *colorsWindowController;
 @end
 
 @implementation SVNDiff
@@ -31,13 +31,12 @@ static SVNDiff *svnDiffPlugin;
     dispatch_once(&onceToken, ^{
         svnDiffPlugin = [[self alloc] init];
         svnDiffPlugin.diffsByFile = [NSMutableDictionary new];
+        svnDiffPlugin.colorsWindowController = [[SVNDiffColorsWindowController alloc] initWithPluginBundle:plugin];
         
-        svnDiffPlugin.deletedColor = [NSColor colorWithCalibratedRed:1. green:.5 blue:.5 alpha:1.];
-        svnDiffPlugin.modifiedColor = [NSColor colorWithCalibratedRed:1. green:.9 blue:.6 alpha:1.];
-        svnDiffPlugin.addedColor = [NSColor colorWithCalibratedRed:.7 green:1. blue:.7 alpha:1.];
+        // insert menu
+        [svnDiffPlugin insertMenuItems];
         
         svnDiffPlugin.popover = [[NSText alloc] initWithFrame:NSZeroRect];
-        svnDiffPlugin.popover.backgroundColor = svnDiffPlugin.modifiedColor;
         
         [self swizzleClass:@"IDESourceCodeDocument"
                   exchange:@selector(writeToURL:ofType:error:)
@@ -56,6 +55,26 @@ static SVNDiff *svnDiffPlugin;
     Class aClass = NSClassFromString(className);
     method_exchangeImplementations(class_getInstanceMethod(aClass, origMethod),
                                    class_getInstanceMethod(aClass, altMethod));
+}
+
+- (void)insertMenuItems
+{
+    NSMenu *editorMenu = [[[NSApp mainMenu] itemWithTitle:@"Edit"] submenu];
+    
+    if (editorMenu) {
+        NSMenuItem *menuItem = [[NSMenuItem alloc] initWithTitle:@"SVNDiff Config"
+                                                          action:@selector(svnDiffColorsMenuItemSelected:)
+                                                   keyEquivalent:@""];
+        menuItem.target = self;
+        
+        [editorMenu addItem:[NSMenuItem separatorItem]];
+        [editorMenu addItem:menuItem];
+    }
+}
+
+- (void)svnDiffColorsMenuItemSelected:(id)sender
+{
+    [svnDiffPlugin.colorsWindowController showWindow:self];
 }
 @end
 
@@ -179,7 +198,7 @@ static SVNDiff *svnDiffPlugin;
     for (int i=0; i<indexCount; i++) {
         unsigned long line = indexes[i];
         NSColor *highlight = !EXISTS(diffs->added, line) ? nil :
-            EXISTS(diffs->modified, line) ? svnDiffPlugin.modifiedColor : svnDiffPlugin.addedColor;
+            EXISTS(diffs->modified, line) ? svnDiffPlugin.colorsWindowController.modifiedColor : svnDiffPlugin.colorsWindowController.addedColor;
         CGRect a0, a1;
         
         if (highlight) {
@@ -187,7 +206,7 @@ static SVNDiff *svnDiffPlugin;
             [self getParagraphRect:&a0 firstLineRect:&a1 forLineNumber:indexes[i]];
             NSRectFill(CGRectInset(a0, 1., 1.));
         } else if (EXISTS(diffs->deleted, line)) {
-            [svnDiffPlugin.deletedColor setFill];
+            [svnDiffPlugin.colorsWindowController.deletedColor setFill];
             [self getParagraphRect:&a0 firstLineRect:&a1 forLineNumber:line];
             a0.size.height = 1.;
             NSRectFill(a0);
@@ -202,6 +221,12 @@ static SVNDiff *svnDiffPlugin;
 - (id)svn_annotationAtSidebarPoint:(CGPoint)p0
 {
     NSText *popover = svnDiffPlugin.popover;
+    
+    svnDiffPlugin.popover.wantsLayer = YES;
+    svnDiffPlugin.popover.layer.cornerRadius = 6.0;
+    
+    svnDiffPlugin.popover.backgroundColor = svnDiffPlugin.colorsWindowController.popoverColor;
+    
     id annotation = [self svn_annotationAtSidebarPoint:p0];
     
     if (!annotation && p0.x < self.sidebarWidth) {

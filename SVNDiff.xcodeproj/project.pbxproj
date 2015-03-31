@@ -10,7 +10,9 @@
 		5A268D6C1AC8F0BA00F18712 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A268D6B1AC8F0BA00F18712 /* Foundation.framework */; };
 		5A42D67B1AC8E403000323B6 /* SVNDiff.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A42D67A1AC8E403000323B6 /* SVNDiff.mm */; };
 		5A42D67F1AC8ED42000323B6 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5A42D67E1AC8ED42000323B6 /* AppKit.framework */; };
-		5A7054331AC90856006F4E09 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 5A7054321AC90856006F4E09 /* README.md */; };
+		5AAC802D1ACA3ADB009F7551 /* SVNDiffColorsWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AAC802C1ACA3ADB009F7551 /* SVNDiffColorsWindowController.m */; };
+		5AAC802F1ACA59B0009F7551 /* Defaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AAC802E1ACA59B0009F7551 /* Defaults.plist */; };
+		5ACB41861ACA257600DB8F9B /* SVNDiff.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5ACB41851ACA257600DB8F9B /* SVNDiff.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,7 +22,10 @@
 		5A42D6791AC8E403000323B6 /* SVNDiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVNDiff.h; sourceTree = "<group>"; };
 		5A42D67A1AC8E403000323B6 /* SVNDiff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SVNDiff.mm; sourceTree = "<group>"; };
 		5A42D67E1AC8ED42000323B6 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		5A7054321AC90856006F4E09 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		5AAC802B1ACA3970009F7551 /* SVNDiffColorsWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVNDiffColorsWindowController.h; sourceTree = "<group>"; };
+		5AAC802C1ACA3ADB009F7551 /* SVNDiffColorsWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVNDiffColorsWindowController.m; sourceTree = "<group>"; };
+		5AAC802E1ACA59B0009F7551 /* Defaults.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Defaults.plist; sourceTree = "<group>"; };
+		5ACB41851ACA257600DB8F9B /* SVNDiff.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SVNDiff.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +63,9 @@
 			children = (
 				5A42D6791AC8E403000323B6 /* SVNDiff.h */,
 				5A42D67A1AC8E403000323B6 /* SVNDiff.mm */,
+				5AAC802B1ACA3970009F7551 /* SVNDiffColorsWindowController.h */,
+				5AAC802C1ACA3ADB009F7551 /* SVNDiffColorsWindowController.m */,
+				5ACB41851ACA257600DB8F9B /* SVNDiff.xib */,
 				5A42D6721AC8E3C3000323B6 /* Supporting Files */,
 			);
 			path = SVNDiff;
@@ -67,7 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				5A42D6731AC8E3C3000323B6 /* Info.plist */,
-				5A7054321AC90856006F4E09 /* README.md */,
+				5AAC802E1ACA59B0009F7551 /* Defaults.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -137,6 +145,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AAC802F1ACA59B0009F7551 /* Defaults.plist in Resources */,
+				5ACB41861ACA257600DB8F9B /* SVNDiff.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,7 +157,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A7054331AC90856006F4E09 /* README.md in Sources */,
+				5AAC802D1ACA3ADB009F7551 /* SVNDiffColorsWindowController.m in Sources */,
 				5A42D67B1AC8E403000323B6 /* SVNDiff.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

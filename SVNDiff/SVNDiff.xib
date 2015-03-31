@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1514" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="6751"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="SVNDiffColorsWindowController">
+            <connections>
+                <outlet property="addedColorWell" destination="wv4-YH-Ycu" id="gMf-oP-5wK"/>
+                <outlet property="deletedColorWell" destination="fjf-h9-rJe" id="Y3n-KK-wYq"/>
+                <outlet property="modifiedColorWell" destination="aKz-JL-gTw" id="fTo-gq-yf7"/>
+                <outlet property="popoverColorWell" destination="GYj-uU-m8Q" id="PqM-xo-Ksp"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="Btv-Uk-RAb"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Colors" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="158" height="205"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1600" height="1177"/>
+            <view key="contentView" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="158" height="205"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BhV-Qj-Wsh">
+                        <rect key="frame" x="24" y="165" width="64" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Modified:" id="pXV-Rd-vCl">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KZN-xa-YXQ">
+                        <rect key="frame" x="24" y="118" width="49" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Added:" id="9SM-S1-TpD">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Kk-V6-rPU">
+                        <rect key="frame" x="24" y="72" width="57" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Deleted:" id="EfB-sk-pqU">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dOC-Js-8jc">
+                        <rect key="frame" x="24" y="27" width="59" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Popover:" id="oP2-wu-W7C">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKz-JL-gTw">
+                        <rect key="frame" x="94" y="162" width="44" height="23"/>
+                        <color key="color" red="0.99607843137254903" green="0.89803921568627454" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="svnDiffColorWellChanged:" target="-2" id="4Pi-G1-V1b"/>
+                        </connections>
+                    </colorWell>
+                    <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fjf-h9-rJe">
+                        <rect key="frame" x="94" y="69" width="44" height="23"/>
+                        <color key="color" red="0.9882352941176471" green="0.49803921568627452" blue="0.50196078431372548" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="svnDiffColorWellChanged:" target="-2" id="MZz-Oq-gcL"/>
+                        </connections>
+                    </colorWell>
+                    <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GYj-uU-m8Q">
+                        <rect key="frame" x="94" y="21" width="44" height="23"/>
+                        <color key="color" red="0.99607843137254903" green="0.89803921568627454" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="svnDiffColorWellChanged:" target="-2" id="FkK-6G-UrN"/>
+                        </connections>
+                    </colorWell>
+                    <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wv4-YH-Ycu">
+                        <rect key="frame" x="94" y="115" width="44" height="23"/>
+                        <color key="color" red="0.70196078431372544" green="1" blue="0.70196078431372544" alpha="1" colorSpace="calibratedRGB"/>
+                        <connections>
+                            <action selector="svnDiffColorWellChanged:" target="-2" id="i1J-Kr-nSD"/>
+                        </connections>
+                    </colorWell>
+                </subviews>
+            </view>
+        </window>
+    </objects>
+</document>
